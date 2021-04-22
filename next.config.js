@@ -1,4 +1,5 @@
 module.exports = {
+    distDir:"./.next",
   env: {
     FIREBASE_KEY: process.env.FIREBASE_KEY,
     FIREBASE_DOMAIN: process.env.FIREBASE_DOMAIN,
