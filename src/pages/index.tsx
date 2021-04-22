@@ -9,7 +9,7 @@ import TaskItem from "../components/TaskItem";
 import classes from '*.module.css';
 import { makeStyles } from '@material-ui/styles';
 import { route } from 'next/dist/next-server/server/router';
-
+import firebase from "firebase/app";
 
 
 const useStyles = makeStyles({
@@ -33,9 +33,17 @@ const [tags,setTags] = useState([{id:"",name:""}]);
 const router = useRouter()
 const [currentUser,setCurrentUser] = useState<null | object>(null)  //この型の設定何だ　<null | object>
 
+//ユーザープロフィール取得
+
+var user = firebase.auth().currentUser;
+if (user != null) {
+  var uid = user.uid;
+}
+
+
 //snapshotでデータベースのtasksの値を取ってくる
 useEffect(() => {
-  const unSub = db.collection("users").doc().collection("tasks").onSnapshot((snapshot) =>{
+  const unSub = db.collection("users").doc(uid).collection("tasks").onSnapshot((snapshot) =>{
     setTasks(
       snapshot.docs.map((doc) => ({id:doc.id,title:doc.data().title}))
     );
@@ -81,7 +89,7 @@ const logOut = async () =>{
 
 
 const newTask = (e: React.MouseEvent<HTMLButtonElement>) => {
-  db.collection("users").doc(props.id).collection("tasks").add({title:input});
+  db.collection("users").doc(uid).collection("tasks").add({title:input});
   setInput("");
 }
 
@@ -117,6 +125,8 @@ const newTask = (e: React.MouseEvent<HTMLButtonElement>) => {
         <TaskItem key={task.id} id={task.id} title={task.title}/>
       ))}
      
+
+
       </List>
       <button onClick={logOut}>Logout</button>
     </div>

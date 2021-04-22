@@ -7,6 +7,9 @@ import { db } from "../utils/firebase";
 import { auth} from '../utils/firebase'
 import {AuthContext} from '../auth/AuthProvider'
 
+import firebase from "firebase/app";
+
+
 
 const SignUp: FC = () => {
     const router = useRouter()
@@ -23,7 +26,12 @@ const createUser = async(e) => {
     e.preventDefault()
     try{
         await auth.createUserWithEmailAndPassword(email,password)
-        db.collection("users").add({userId:email}); //ユーザーアカウントを作成したらfirestoreにデータ登録
+        //firebase.auth.currentUser
+        var user = firebase.auth().currentUser;
+          if (user != null) {  //ここでuserID作成
+             var uid = user.uid;
+                }
+        db.collection("users").doc(uid).set({userId:email}); //ユーザーアカウントを作成したらfirestoreにデータ登録
         setEmail('')
         router.push('./login')
     }catch(err){
