@@ -32,6 +32,16 @@ const createUser = async(e) => {
              var uid = user.uid;
                 }
         db.collection("users").doc(uid).set({userId:email}); //ユーザーアカウントを作成したらfirestoreにデータ登録
+        var tags:Array<string> = new Array(3);
+            tags[0] = "国語";
+            tags[1] = "算数";
+            tags[2] = "社会";
+
+        for(var i=0;i<3;i++){
+            db.collection("users").doc(uid).collection("tags").add({tagName:tags[i]}); //ユーザーアカウントを作成したらfirestoreにデータ登録     
+        
+        }
+
         setEmail('')
         router.push('./login')
     }catch(err){
