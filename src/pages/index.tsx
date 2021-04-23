@@ -10,6 +10,7 @@ import classes from '*.module.css';
 import { makeStyles } from '@material-ui/styles';
 import { route } from 'next/dist/next-server/server/router';
 import firebase from "firebase/app";
+import { create } from 'node:domain';
 
 
 const useStyles = makeStyles({
@@ -85,8 +86,14 @@ const newTask = (e: React.MouseEvent<HTMLButtonElement>) => {
   setTaginput("");
 }
 
+const createForm = (e: React.MouseEvent<HTMLButtonElement>) => {
+  let addForm = document.getElementById("tagForm");
+  let copyForm = addForm.cloneNode(false);
+  document.body.appendChild(copyForm);
+}
 
 
+let query = db.collection("users").doc(uid).collection("tasks").where("tagIds","==","first"); //フィルター
 
   return ( 
   <div className="App_root">
@@ -100,26 +107,31 @@ const newTask = (e: React.MouseEvent<HTMLButtonElement>) => {
         setInput(e.target.value)
       }}
       />
-      
+
     <TextField
       className={classes.field}
+      id="tagForm"
       label="new tag"
       value={tagInput}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>{
         setTaginput(e.target.value)
       }}
+   
 />
   </FormControl>
      <button className="App__icon" disabled={!input} onClick={newTask}>
       <AddToPhotosIcon />
     </button>
 
+  
+    <button onClick={createForm}>
+      <p>more tag</p>
+    </button>
+
       <List className={classes.list}>
       {tasks.map((task)=>(
         <TaskItem key={task.id} id={task.id} title={task.title} tagIds={task.tagIds}/>
       ))}
-     
-
 
       </List>
       <button onClick={logOut}>Logout</button>

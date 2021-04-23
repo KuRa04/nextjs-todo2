@@ -11,7 +11,7 @@ import firebase from "firebase/app";
 interface PROPS{
     id:string;
     title:string;
-    tagIds:string[];
+    tagIds:number[];
 }
 
 
