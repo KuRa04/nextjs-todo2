@@ -25,10 +25,11 @@ const useStyles = makeStyles({
 
 const Home: React.FC = (props:any) => {
 
-const [tasks,setTasks] = useState([{id:"",title:""}]);   //titleをfirestoreのデータベースから取ってくr
+const [tasks,setTasks] = useState([{id:"",title:"",tagIds:[]}]);   //titleをfirestoreのデータベースから取ってくr
 const [input,setInput] = useState("");
+const [tagInput,setTaginput] =  useState("");
 const classes = useStyles();
-const [tags,setTags] = useState([{id:"",name:""}]);
+
 
 const router = useRouter()
 const [currentUser,setCurrentUser] = useState<null | object>(null)  //この型の設定何だ　<null | object>
@@ -45,23 +46,13 @@ if (user != null) {
 useEffect(() => {
   const unSub = db.collection("users").doc(uid).collection("tasks").onSnapshot((snapshot) =>{
     setTasks(
-      snapshot.docs.map((doc) => ({id:doc.id,title:doc.data().title}))
+      snapshot.docs.map((doc) => ({id:doc.id,title:doc.data().title,tagIds:doc.data().tagIds}))
     );
   });
 
   return () => unSub();
 },[]);
 
-//snapshotでデータベースのtagsの値を取ってくる
-useEffect(() => {
-  const unSub = db.collection("tags").onSnapshot((snapshot) =>{
-    setTags(
-      snapshot.docs.map((doc) => ({id:doc.id,name:doc.data().name}))
-    );
-  });
-
-  return () => unSub();
-},[]);
 
 //user情報の確認
 useEffect(() => {
@@ -89,8 +80,9 @@ const logOut = async () =>{
 
 
 const newTask = (e: React.MouseEvent<HTMLButtonElement>) => {
-  db.collection("users").doc(uid).collection("tasks").add({title:input});
+  db.collection("users").doc(uid).collection("tasks").add({title:input,tagIds:tagInput});
   setInput("");
+  setTaginput("");
 }
 
 
@@ -108,13 +100,11 @@ const newTask = (e: React.MouseEvent<HTMLButtonElement>) => {
         setInput(e.target.value)
       }}
       />
-      <select multiple={true}>
-        {
-          tags.map((tag)=>
-        <option value={tag.name}>{tag.name}</option>
-          )
-      }
-     </select>
+      <select>
+        <option value=""></option>
+
+
+      </select>
   </FormControl>
      <button className="App__icon" disabled={!input} onClick={newTask}>
       <AddToPhotosIcon />
