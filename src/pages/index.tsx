@@ -28,7 +28,7 @@ const Home: React.FC = (props:any) => {
 
 const [tasks,setTasks] = useState([{id:"",title:"",tagIds:[]}]);   //titleをfirestoreのデータベースから取ってくr
 const [input,setInput] = useState("");
-const [tagInput,setTaginput] =  useState("");
+const [tagInput,setTaginput] =  useState([]);
 const classes = useStyles();
 
 
@@ -83,7 +83,7 @@ const logOut = async () =>{
 const newTask = (e: React.MouseEvent<HTMLButtonElement>) => {
   db.collection("users").doc(uid).collection("tasks").add({title:input,tagIds:tagInput});
   setInput("");
-  setTaginput("");
+  setTaginput([]);
 }
 
 const createForm = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -97,7 +97,7 @@ let query = db.collection("users").doc(uid).collection("tasks").where("tagIds","
 
   return ( 
   <div className="App_root">
-    <h1 className="title">Firebase/Next.js TodoList</h1>
+    <h1 className="title">Firebase/Next.jsTodoList</h1>
     <FormControl>
       <TextField
       className={classes.field}
