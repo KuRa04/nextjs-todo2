@@ -32,8 +32,8 @@ const createUser = async(e) => {
              var uid = user.uid;
                 }
         db.collection("users").doc(uid).set({userId:email}); //ユーザーアカウントを作成したらfirestoreにデータ登録
-        const tags = ["国語","算数","社会"];   //配列の宣言方法と型推論によって型を定義していなくとも認識してくれる
-        tags.forEach(tags => db.collection("users").doc(uid).collection("tags").add({tagName:tags}));   //foreachで書き直したもの 
+        // const tags = ["国語","算数","社会"];   //配列の宣言方法と型推論によって型を定義していなくとも認識してくれる
+        // tags.forEach(tags => db.collection("users").doc(uid).collection("tags").add({tagName:tags}));   //foreachで書き直したもの 
         setEmail('')
         router.push('./login')
     }catch(err){

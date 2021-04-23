@@ -4,23 +4,33 @@ import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined"
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined"
 import { db } from "../utils/firebase"
 import Link from 'next/link'
+import firebase from "firebase/app";
+
 
 
 interface PROPS{
     id:string;
     title:string;
+    tagIds:string[];
 }
+
+
+var user = firebase.auth().currentUser;
+if (user != null) {
+  var uid = user.uid;
+}
+
 
 const TaskItem: React.FC<PROPS> = (props) =>{
     const [title,setTitle] = useState(props.title);
 
 
     const editTask = () => {
-        db.collection("tasks").doc(props.id).set({title:title},{merge:true});
+        db.collection("users").doc(uid).collection("tasks").doc(props.id).set({title:title},{merge:true});
     }
 
     const deleteTask = () => {
-        db.collection("tasks").doc(props.id).delete();
+        db.collection("users").doc(uid).collection("tasks").doc(props.id).delete();
     }
 
 
@@ -30,6 +40,7 @@ return (
         <Link href="../tasks/detail"><a>
         {props.title}
          </a></Link>
+         <p>{props.tagIds}</p>
         <Grid container justify="flex-end">
         <TextField
         label="Edit task"

@@ -100,11 +100,15 @@ const newTask = (e: React.MouseEvent<HTMLButtonElement>) => {
         setInput(e.target.value)
       }}
       />
-      <select>
-        <option value=""></option>
-
-
-      </select>
+      
+    <TextField
+      className={classes.field}
+      label="new tag"
+      value={tagInput}
+      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>{
+        setTaginput(e.target.value)
+      }}
+/>
   </FormControl>
      <button className="App__icon" disabled={!input} onClick={newTask}>
       <AddToPhotosIcon />
@@ -112,7 +116,7 @@ const newTask = (e: React.MouseEvent<HTMLButtonElement>) => {
 
       <List className={classes.list}>
       {tasks.map((task)=>(
-        <TaskItem key={task.id} id={task.id} title={task.title}/>
+        <TaskItem key={task.id} id={task.id} title={task.title} tagIds={task.tagIds}/>
       ))}
      
 
