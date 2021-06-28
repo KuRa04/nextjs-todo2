@@ -12,7 +12,6 @@ import { route } from 'next/dist/next-server/server/router';
 import firebase from "firebase/app";
 import { create } from 'node:domain';
 
-
 const useStyles = makeStyles({
   field:{
     marginTop:30,
@@ -30,18 +29,13 @@ const [tasks,setTasks] = useState([{id:"",title:"",tagIds:[]}]);   //titleをfir
 const [input,setInput] = useState("");
 const [tagInput,setTaginput] =  useState([]);
 const classes = useStyles();
-
-
 const router = useRouter()
 const [currentUser,setCurrentUser] = useState<null | object>(null)  //この型の設定何だ　<null | object>
-
-//ユーザープロフィール取得
 
 var user = firebase.auth().currentUser;
 if (user != null) {
   var uid = user.uid;
 }
-
 
 //snapshotでデータベースのtasksの値を取ってくる
 useEffect(() => {
@@ -53,7 +47,6 @@ useEffect(() => {
 
   return () => unSub();
 },[]);
-
 
 //user情報の確認
 useEffect(() => {
@@ -78,8 +71,6 @@ const logOut = async () =>{
 //   db.collection("tasks").add({title:input});
 //   setInput("");
 // }
-
-
 const newTask = (e: React.MouseEvent<HTMLButtonElement>) => {
   db.collection("users").doc(uid).collection("tasks").add({title:input,tagIds:tagInput});
   setInput("");
@@ -92,10 +83,9 @@ const createForm = (e: React.MouseEvent<HTMLButtonElement>) => {
   document.body.appendChild(copyForm);
 }
 
-
 let query = db.collection("users").doc(uid).collection("tasks").where("tagIds","==","first"); //フィルター
 
-  return ( 
+  return (
   <div className="App_root">
     <h1 className="title">Firebase/Next.jsTodoList</h1>
     <FormControl>
@@ -116,29 +106,22 @@ let query = db.collection("users").doc(uid).collection("tasks").where("tagIds","
       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>{
         setTaginput(e.target.value)
       }}
-   
-/>
-  </FormControl>
-     <button className="App__icon" disabled={!input} onClick={newTask}>
-      <AddToPhotosIcon />
-    </button>
-
-  
-    <button onClick={createForm}>
-      <p>more tag</p>
-    </button>
-
+    />
+    </FormControl>
+       <button className="App__icon" disabled={!input} onClick={newTask}>
+        <AddToPhotosIcon />
+      </button>
+      <button onClick={createForm}>
+        <p>more tag</p>
+      </button>
       <List className={classes.list}>
       {tasks.map((task)=>(
         <TaskItem key={task.id} id={task.id} title={task.title} tagIds={task.tagIds}/>
       ))}
-
       </List>
       <button onClick={logOut}>Logout</button>
     </div>
-
-
-  );
-};
+    );
+  };
 
 export default Home;
